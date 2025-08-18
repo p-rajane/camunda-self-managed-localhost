@@ -153,7 +153,7 @@ camunda.client.zeebe.rest-address.path=/v2/
 ### 3. Create .bpmn file
 - Now create bpmn file in /src/main/resources folder and create the workers for service tasks in the process.
 
-### 3. Start spring boot application.
+### 4. Start spring boot application.
 - Once all configuration done, process created, good to clean and compile the spring boot application.
 - Now start the spring boot application and monitor the console. You should see logs like 
 ```bash
@@ -163,6 +163,6 @@ Deployed:<process>
 ```
 This shows that your application is up and processes are successfully deployed to localhost c8 run.
 
-### Monitor and play with processes.
+### 5. Monitor and play with processes.
 - After successfull start of an application, open operate URL given in step 1 as  [http://localhost:8080/operate]( http://localhost:8080/operate)
 - You can check your process deployed, versions. Also can start the instance from tasklist as [ http://localhost:8080/tasklist]( http://localhost:8080/tasklist)
