@@ -1,43 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0qfg0zs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0qfg0zs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
   <bpmn:collaboration id="Collaboration_10fncqo">
-    <bpmn:participant id="Participant_0hnjemh" processRef="Process_0n08y9z" />
+    <bpmn:participant id="Participant_0hnjemh" processRef="TestProcess" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0n08y9z" isExecutable="true">
+  <bpmn:process id="TestProcess" name="Camunda 8 Local Host" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0vzv5qo</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Activity_1vpc4ho">
+    <bpmn:serviceTask id="Activity_1vpc4ho" name="Set Flight Status">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="setFlightStatus" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0vzv5qo</bpmn:incoming>
-      <bpmn:outgoing>Flow_1g9gte9</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:endEvent id="Event_1x2oe0j">
-      <bpmn:incoming>Flow_1g9gte9</bpmn:incoming>
-    </bpmn:endEvent>
+      <bpmn:outgoing>Flow_0nq69gf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1gknj1i">
+      <bpmn:incoming>Flow_0nq69gf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0awapyl</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0pw6kjt</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0vzv5qo" sourceRef="StartEvent_1" targetRef="Activity_1vpc4ho" />
-    <bpmn:sequenceFlow id="Flow_1g9gte9" sourceRef="Activity_1vpc4ho" targetRef="Event_1x2oe0j" />
+    <bpmn:sequenceFlow id="Flow_0nq69gf" sourceRef="Activity_1vpc4ho" targetRef="Gateway_1gknj1i" />
+    <bpmn:sequenceFlow id="Flow_0awapyl" sourceRef="Gateway_1gknj1i" targetRef="Activity_1gqzahc">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=route="domestic"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0pw6kjt" sourceRef="Gateway_1gknj1i" targetRef="Activity_1wtgtm6">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=route="inter"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_19p8hd6" sourceRef="Activity_1gqzahc" targetRef="Gateway_0ap0i7a" />
+    <bpmn:exclusiveGateway id="Gateway_0ap0i7a">
+      <bpmn:incoming>Flow_19p8hd6</bpmn:incoming>
+      <bpmn:incoming>Flow_0gzxxpo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ajdn7o</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0gzxxpo" sourceRef="Activity_1wtgtm6" targetRef="Gateway_0ap0i7a" />
+    <bpmn:sequenceFlow id="Flow_1ajdn7o" sourceRef="Gateway_0ap0i7a" targetRef="Event_0i1pejj" />
+    <bpmn:endEvent id="Event_0i1pejj">
+      <bpmn:incoming>Flow_1ajdn7o</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1gqzahc" name="Domestic Flights">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="domesticFlightWorker" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0awapyl</bpmn:incoming>
+      <bpmn:outgoing>Flow_19p8hd6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1wtgtm6" name="International Flights">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="internationalFlightWorker" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pw6kjt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gzxxpo</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_10fncqo">
       <bpmndi:BPMNShape id="Participant_0hnjemh_di" bpmnElement="Participant_0hnjemh" isHorizontal="true">
-        <dc:Bounds x="160" y="70" width="600" height="250" />
+        <dc:Bounds x="160" y="60" width="780" height="350" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
-        <dc:Bounds x="232" y="162" width="36" height="36" />
+        <dc:Bounds x="232" y="202" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vpc4ho_di" bpmnElement="Activity_1vpc4ho">
-        <dc:Bounds x="320" y="140" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1lms7jy_di" bpmnElement="Activity_1vpc4ho">
+        <dc:Bounds x="320" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1x2oe0j_di" bpmnElement="Event_1x2oe0j">
-        <dc:Bounds x="472" y="162" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_1gknj1i_di" bpmnElement="Gateway_1gknj1i" isMarkerVisible="true">
+        <dc:Bounds x="475" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ap0i7a_di" bpmnElement="Gateway_0ap0i7a" isMarkerVisible="true">
+        <dc:Bounds x="716" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0i1pejj_di" bpmnElement="Event_0i1pejj">
+        <dc:Bounds x="822" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lppde7_di" bpmnElement="Activity_1gqzahc">
+        <dc:Bounds x="580" y="90" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0g1lrzy_di" bpmnElement="Activity_1wtgtm6">
+        <dc:Bounds x="580" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0vzv5qo_di" bpmnElement="Flow_0vzv5qo">
-        <di:waypoint x="268" y="180" />
-        <di:waypoint x="320" y="180" />
+        <di:waypoint x="268" y="220" />
+        <di:waypoint x="320" y="220" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1g9gte9_di" bpmnElement="Flow_1g9gte9">
-        <di:waypoint x="420" y="180" />
-        <di:waypoint x="472" y="180" />
+      <bpmndi:BPMNEdge id="Flow_0nq69gf_di" bpmnElement="Flow_0nq69gf">
+        <di:waypoint x="420" y="220" />
+        <di:waypoint x="475" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0awapyl_di" bpmnElement="Flow_0awapyl">
+        <di:waypoint x="500" y="195" />
+        <di:waypoint x="500" y="130" />
+        <di:waypoint x="580" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pw6kjt_di" bpmnElement="Flow_0pw6kjt">
+        <di:waypoint x="500" y="245" />
+        <di:waypoint x="500" y="330" />
+        <di:waypoint x="580" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19p8hd6_di" bpmnElement="Flow_19p8hd6">
+        <di:waypoint x="680" y="130" />
+        <di:waypoint x="741" y="130" />
+        <di:waypoint x="741" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gzxxpo_di" bpmnElement="Flow_0gzxxpo">
+        <di:waypoint x="680" y="330" />
+        <di:waypoint x="741" y="330" />
+        <di:waypoint x="741" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ajdn7o_di" bpmnElement="Flow_1ajdn7o">
+        <di:waypoint x="766" y="220" />
+        <di:waypoint x="822" y="220" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
