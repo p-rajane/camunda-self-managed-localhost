@@ -1,15 +1,20 @@
-# Camunda 8 - Self Managed on localhost
+### Camunda 8 - Self Managed on localhost
 
-This is Camunda 8 Spring Boot application demonstrated the step by step guide to create, run Camunda 8 spring boot integrated application, to host as a self managed on localhost
+Camunda 8 provides two ways to host your application on zeebe server, using **SaaS** (camunda zeebe server) or **Self managed** hosting using any cloud, within kubernetes or other containerization framework.
+Out of which for the begginners, it always good to try it out on local machine, get hands dirty in trial and error and move to production ready suit afterwords.
 
-## Prerequisites
+This application demonstrate how to setup the camunda 8 on local, integrate as a spring boot application and run the camunda 8 spring boot application on localhost.
+
+These commands are windows OS specific and alternative OS commands can be found in relavant documents.
+
+### Prerequisites
 - [JDK 21+](https://www.oracle.com/in/java/technologies/downloads/)
 - [Desktop Modeler](https://docs.camunda.io/docs/components/modeler/desktop-modeler/)
 - [Camunda 8 Run](https://downloads.camunda.cloud/release/camunda/c8run/8.7/)
 
 Once all above software/packages installed, follow below steps,
 
-### 1. Run Camunda 8 on local
+### 1. Run Camunda 8 on local machine
 
 Go to Camunda 8 Run folder and execute below command from command prompt
 ```bash
@@ -57,7 +62,7 @@ Camunda metrics endpoint:    http://localhost:9600/actuator/prometheus
 When using the Desktop Modeler, Authentication may be set to None.
 ```
 ### 2. Create Spring Boot Application
-- Create one spring boot application using spring initializer and make sure to add below zeebe related dependency.
+- Create one spring boot application using [Spring Initializer](https://start.spring.io/) and make sure to add below zeebe related dependency.
 ```bash
         <dependency>
 			<groupId>io.camunda</groupId>
@@ -138,7 +143,7 @@ When using the Desktop Modeler, Authentication may be set to None.
 		</repository>
 	</repositories>
 ```
-- Now configure zeebe connection details in this spring boot application. Open application.properties/yml file in /src/main/resources and add below properties
+- Now configure zeebe connection details in this spring boot application. Open application.properties/yml file in **/src/main/resources** and add below properties
 ```bash
 camunda.client.mode=selfmanaged
 camunda.client.zeebe.defaults.enabled=true
@@ -153,7 +158,7 @@ camunda.client.zeebe.rest-address.path=/v2/
 ### 3. Create .bpmn file
 - Now create bpmn file in /src/main/resources folder and create the workers for service tasks in the process.
 
-### 4. Start spring boot application.
+### 4. Start spring boot application
 - Once all configuration done, process created, good to clean and compile the spring boot application.
 - Now start the spring boot application and monitor the console. You should see logs like 
 ```bash
@@ -163,6 +168,6 @@ Deployed:<process>
 ```
 This shows that your application is up and processes are successfully deployed to localhost c8 run.
 
-### 5. Monitor and play with processes.
+### 5. Monitor and play with processes
 - After successfull start of an application, open operate URL given in step 1 as  [http://localhost:8080/operate]( http://localhost:8080/operate)
 - You can check your process deployed, versions. Also can start the instance from tasklist as [ http://localhost:8080/tasklist]( http://localhost:8080/tasklist)
