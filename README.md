@@ -1,11 +1,11 @@
 ### Camunda 8 - Self Managed on localhost
 
-Camunda 8 provides two ways to host your application on zeebe server, using **SaaS** (camunda zeebe server) or **Self managed** hosting using any cloud, within kubernetes or other containerization framework.
+Camunda 8 provides two ways to host your application on zeebe server, using **SaaS** (camunda zeebe server) or **Self managed** hosting using any cloud, within Kubernetes or other containerization framework.
 Out of which for the begginners, it always good to try it out on local machine, get hands dirty in trial and error and move to production ready suit afterwords.
 
 This application demonstrate how to setup the camunda 8 on local, integrate as a spring boot application and run the camunda 8 spring boot application on localhost.
 
-These commands are windows OS specific and alternative OS commands can be found in relavant documents.
+These commands are windows OS specific and alternative OS commands can be found in relevant documents.
 
 ### Prerequisites
 - [JDK 21+](https://www.oracle.com/in/java/technologies/downloads/)
@@ -169,5 +169,5 @@ Deployed:<process>
 This shows that your application is up and processes are successfully deployed to localhost c8 run.
 
 ### 5. Monitor and play with processes
-- After successfull start of an application, open operate URL given in step 1 as  [http://localhost:8080/operate]( http://localhost:8080/operate)
+- After successful start of an application, open operate URL given in step 1 as  [http://localhost:8080/operate]( http://localhost:8080/operate)
 - You can check your process deployed, versions. Also can start the instance from tasklist as [ http://localhost:8080/tasklist]( http://localhost:8080/tasklist)
